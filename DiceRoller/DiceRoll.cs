@@ -6,22 +6,33 @@ namespace DiceRoller
     {
         private int num {  get; set; }
         private int val { get; set; }
+
+        private int mod { get; set; }
         public DiceRoll() { }
+
+        public DiceRoll(int num, int val, int mod)
+        {
+            this.num = num;
+            this.val = val;
+            this.mod = mod;
+        }
         public DiceRoll(int num, int val) 
         { 
             this.num = num;
             this.val = val;
+            this.mod = 0;
         }
         public DiceRoll(int val)
         {
             this.num = 1;
             this.val = val;
+            this.mod = 0;
         }
 
         public int Roll()
         {
             var rand = new Random();
-            int sum = 0;
+            int sum = mod;
             for(int i = 0; i < num; i++)
             {
                 sum += rand.Next(1, val);
@@ -45,11 +56,11 @@ namespace DiceRoller
             return sum;
         }
 
-        public int Maximum() { return num * val; }
+        public int Maximum() { return num * val + mod; }
 
-        public int Minimum() { return num; }
+        public int Minimum() { return num + mod; }
 
-        public float Mean() { return ((num * (val-1)) / 2) + num; }
+        public float Mean() { return ((num * (val-1)) / 2) + num + mod; }
 
 
 
