@@ -1,66 +1,97 @@
-using System.ComponentModel.DataAnnotations;
+using System.ComponentModifierel.DataAnnotations;
+using System.Windows.Controls;
 
 namespace DiceRoller
 {
     public class DiceRoll
     {
-        private int num {  get; set; }
-        private int val { get; set; }
+        private int NumOfDice {  get; set; }
+        private int Sides { get; set; }
 
-        private int mod { get; set; }
-        public DiceRoll() { }
+        private int Modifier { get; set; }
 
-        public DiceRoll(int num, int val, int mod)
+        private void ParameterExceptionCatcher(int NumOfDice, int Sides)
         {
-            this.num = num;
-            this.val = val;
-            this.mod = mod;
+            if(NumOfDice < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(NumOfDice), NumOfDice, "NumOfDice must be an integer with a value of at least 1");
+            }
+
+            if (Sides < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(Sides), Sides, "Sides must be an integer with a value of at least 1");
+            }
+            
         }
-        public DiceRoll(int num, int val) 
-        { 
-            this.num = num;
-            this.val = val;
-            this.mod = 0;
-        }
-        public DiceRoll(int val)
+        //public DiceRoll() { }
+
+        public DiceRoll(int NumOfDice, int Sides, int Modifier)
         {
-            this.num = 1;
-            this.val = val;
-            this.mod = 0;
+            ParameterExceptionCatcher(NumOfDice, Sides);
+            this.NumOfDice = NumOfDice;
+            this.Sides = Sides;
+            this.Modifier = Modifier;
+        }
+        public DiceRoll(int NumOfDice, int Sides) 
+        {
+            ParameterExceptionCatcher(NumOfDice, Sides);
+            this.NumOfDice = NumOfDice;
+            this.Sides = Sides;
+            Modifier = 0;
+        }
+        public DiceRoll(int Sides)
+        {
+            ParameterExceptionCatcher(1, Sides);
+            NumOfDice = 1;
+            this.Sides = Sides;
+            Modifier = 0;
         }
 
         public int Roll()
         {
             var rand = new Random();
-            int sum = mod;
-            for(int i = 0; i < num; i++)
+            int sum = Modifier;
+            for(int i = 0; i < NumOfDice; i++)
             {
-                sum += rand.Next(1, val);
+                sum += rand.Next(1, Sides);
             }
             return sum;
         }
-        public static int Roll(int val)
+        public static int Roll(int Sides)
         {
+            if (Sides < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(Sides), Sides, "Sides must be an integer with a value of at least 1");
+            }
             var rand = new Random();
-            return rand.Next(1,val);
+            return rand.Next(1,Sides);
         }
 
-        public static int Roll(int num, int val)
+        public static int Roll(int NumOfDice, int Sides)
         {
+            if (NumOfDice < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(NumOfDice), NumOfDice, "NumOfDice must be an integer with a value of at least 1");
+            }
+
+            if (Sides < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(Sides), Sides, "Sides must be an integer with a value of at least 1");
+            }
             var rand = new Random();
             int sum = 0;
-            for (int i = 0; i < num; i++)
+            for (int i = 0; i < NumOfDice; i++)
             {
-                sum += rand.Next(1, val);
+                sum += rand.Next(1, Sides);
             }
             return sum;
         }
 
-        public int Maximum() { return num * val + mod; }
+        public int Maximum() { return NumOfDice * Sides + Modifier; }
 
-        public int Minimum() { return num + mod; }
+        public int Minimum() { return NumOfDice + Modifier; }
 
-        public float Mean() { return ((num * (val-1)) / 2) + num + mod; }
+        public float Mean() { return ((NumOfDice * (Sides-1)) / 2) + NumOfDice + Modifier; }
 
 
 
